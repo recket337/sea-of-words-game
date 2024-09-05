@@ -1,0 +1,51 @@
+.circleContainer {
+  position: relative;
+  width: 294px;
+  height: 294px;
+  overflow: visible;
+  background: transparent;
+  border-radius: 50%;
+  border: 22px solid #3E4A68;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  list-style-type: none;
+}
+
+.label {
+  position: absolute;
+}
+
+.letter {
+  font-family: 'VAG World';
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  font-size: 57px;
+  font-weight: 700;
+  line-height: 114.23px;
+  color: #4D4D4D;
+
+  &:active {
+    background-color: #E96FA4;
+    color: #FFFFFF;
+    &::after {
+      background-color: #AF638C;
+    }
+  }
+
+  &::after {
+    content: "";
+    position: absolute;
+    top: 5px;
+    background-color: #A6A8AB;
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    z-index: -1;
+  }
+}
