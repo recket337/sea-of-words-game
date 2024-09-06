@@ -114,7 +114,7 @@ export const LetterCircle = ({ words, guessWord }) => {
         />
       </svg>
 
-      {letters.map((letter, index) => {
+      {letters.sort().map((letter, index) => {
         const angle = (index / letters.length) * (2 * Math.PI);
         const x = radius * Math.cos(angle);
         const y = radius * Math.sin(angle);
