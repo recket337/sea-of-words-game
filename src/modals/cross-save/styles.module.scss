@@ -1,0 +1,24 @@
+.background {
+  width: 100%;
+  height: 100%;
+  background-color: black;
+  opacity: .7;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal {
+  width: 80%;
+  max-width: 530px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  font-family: 'VAG World';
+  font-size: 32px;
+  font-weight: 700;
+  line-height: 38px;
+  color: #4D4D4D;
+}
