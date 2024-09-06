@@ -97,3 +97,22 @@
   height: 24px;
   z-index: -1;
 }
+
+@media (max-width: 530px) {
+  .squareLeft {
+    display: none;
+  }
+  
+  .squareRight {
+    display: none;
+  }
+
+  .title {
+    border-radius: 30px;
+  }
+
+  .modal {
+    padding-left: 30px;
+    padding-right: 30px;
+  }
+}
