@@ -1,0 +1,16 @@
+{
+  "files": {
+    "main.css": "/sea-of-words-game/static/css/main.68062765.css",
+    "main.js": "/sea-of-words-game/static/js/main.75165cfe.js",
+    "static/js/453.15bda17c.chunk.js": "/sea-of-words-game/static/js/453.15bda17c.chunk.js",
+    "static/media/VAG World Bold.ttf": "/sea-of-words-game/static/media/VAG World Bold.cc1f7c7e4c5bf2fe7b78.ttf",
+    "index.html": "/sea-of-words-game/index.html",
+    "main.68062765.css.map": "/sea-of-words-game/static/css/main.68062765.css.map",
+    "main.75165cfe.js.map": "/sea-of-words-game/static/js/main.75165cfe.js.map",
+    "453.15bda17c.chunk.js.map": "/sea-of-words-game/static/js/453.15bda17c.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.68062765.css",
+    "static/js/main.75165cfe.js"
+  ]
+}
