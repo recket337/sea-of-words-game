@@ -18,7 +18,6 @@ export function useGameSave(currentlevel, words, remainingWords, changeCallback)
     const check = setInterval(() => {
       const pingedSave = getPingedSave();
       const remeaningWordsCompare = pingedSave.remainingWords.sort().toString() === remainingWords.sort().toString();
-      console.log(pingedSave.remainingWords.sort().toString(),'---', remainingWords.sort().toString())
 
       if (pingedSave.currentlevel !== currentlevel || !remeaningWordsCompare) {
         setCrossSaveModalState(true);

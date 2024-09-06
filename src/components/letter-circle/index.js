@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import styles from './styles.module.scss';
 import { getLettersFromLevelVocabulary } from '../../utils/getLettersFromLevelVocabulary';
 
@@ -10,26 +10,28 @@ export const LetterCircle = ({ words, guessWord }) => {
   const [currentPoint, setCurrentPoint] = useState(null);
   const letters = getLettersFromLevelVocabulary(words);
 
-  const handleMouseDown = (index, event) => {
+  const handleStart = (index, event) => {
     setIsDragging(true);
+    const touch = event.touches ? event.touches.item(0) : event;
     const buttonElement = event.target.getBoundingClientRect();
     const rect = svgRef.current.getBoundingClientRect();
     const centerX = buttonElement.left + buttonElement.width / 2 - rect.left;
     const centerY = buttonElement.top + buttonElement.height / 2 - rect.top;
-    
-    setSelectedPoints([{ x: centerX, y: centerY, id: event.target.id, id: event.target.id, letter: event.target.innerHTML }]);
+
+    setSelectedPoints([{ x: centerX, y: centerY, id: touch.target.id, letter: touch.target.innerHTML }]);
   };
 
-  const handleMouseMove = (event) => {
+  const handleMove = (event) => {
     if (isDragging) {
+      const touch = event.touches ? event.touches.item(0) : event;
       const rect = svgRef.current.getBoundingClientRect();
-      setCurrentPoint({ x: event.clientX - rect.left, y: event.clientY - rect.top });
+      setCurrentPoint({ x: touch.clientX - rect.left, y: touch.clientY - rect.top });
     }
   };
 
-  const handleMouseUp = () => {
+  const handleEnd = () => {
     setIsDragging(false);
-    const finalWord = selectedPoints.map(dot => dot.letter).join('').toLocaleLowerCase();
+    const finalWord = selectedPoints.map(dot => dot.letter).join('').toLowerCase();
     guessWord(finalWord);
     setSelectedPoints([]);
     setCurrentPoint(null);
@@ -41,7 +43,7 @@ export const LetterCircle = ({ words, guessWord }) => {
       const rect = svgRef.current.getBoundingClientRect();
       const centerX = buttonElement.left + buttonElement.width / 2 - rect.left;
       const centerY = buttonElement.top + buttonElement.height / 2 - rect.top;
-      
+
       const isSelected = selectedPoints.some(point => point.id === event.target.id);
 
       if (selectedPoints[selectedPoints.length - 2]?.id === event.target.id) {
@@ -54,19 +56,56 @@ export const LetterCircle = ({ words, guessWord }) => {
     }
   };
 
+  const handleTouchLetter = (index, event) => {
+    if (isDragging) {
+      const touch = event.touches ? event.touches[0] : event;
+
+      letters.forEach((letter, index) => {
+        const id = `${letter}-${index}`;
+        const button = document.getElementById(id);
+        const rect = button.getBoundingClientRect();
+
+        if (
+          touch.clientX >= rect.left &&
+          touch.clientX <= rect.right &&
+          touch.clientY >= rect.top &&
+          touch.clientY <= rect.bottom
+        ) {
+          console.log('id')
+          const buttonElement = button.getBoundingClientRect();
+          const rect = svgRef.current.getBoundingClientRect();
+          const centerX = buttonElement.left + buttonElement.width / 2 - rect.left;
+          const centerY = buttonElement.top + buttonElement.height / 2 - rect.top;
+
+          const isSelected = selectedPoints.some(point => point.id === id);
+
+          if (selectedPoints[selectedPoints.length - 2]?.id === id) {
+            setSelectedPoints(prev => prev.slice(0, -1));
+          }
+
+          if (!isSelected) {
+            console.log('setting hover')
+            setSelectedPoints((prevPoints) => [...prevPoints, { x: centerX, y: centerY, id: id, letter: button.innerHTML }]);
+          }
+        }
+      });
+    }
+  };
+
   return (
     <div
       className={styles.circleContainer}
-      onMouseMove={handleMouseMove}
-      onMouseUp={handleMouseUp}
+      onMouseMove={handleMove}
+      onMouseUp={handleEnd}
+      onTouchMove={handleMove}
+      onTouchEnd={handleEnd}    
     >
       <svg ref={svgRef} className={styles.svgOverlay}>
         <path
           d={
             selectedPoints.length
-              ? `M ${selectedPoints.map((p) => `${p.x} ${p.y}`).join(' L ')} ${
-                  currentPoint ? `L ${currentPoint.x} ${currentPoint.y}` : ''
-                }`
+              ? `M ${selectedPoints.map((p) => `${p.x} ${p.y}`).join(' L ')} ${currentPoint ? `L ${currentPoint.x} ${currentPoint.y}` : ''
+              }`
               : ''
           }
           stroke="#E96FA4"
@@ -88,12 +127,14 @@ export const LetterCircle = ({ words, guessWord }) => {
             key={index}
             style={{
               transform: `translate(${x}px, ${y}px)`,
-            }}    
+            }}
           >
             <button
-              className={`${styles.letter } ${isActive && styles.active}`}
-              onMouseDown={(e) => handleMouseDown(index, e)}
+              className={`${styles.letter} ${isActive ? styles.active : ''}`}
+              onMouseDown={(e) => handleStart(index, e)}
               onMouseEnter={(e) => handleLetterHover(index, e)}
+              onTouchStart={(e) => handleStart(index, e)} 
+              onTouchMove={(e) => handleTouchLetter(index, e)}  
               id={id}
             >
               {letter.toUpperCase()}
